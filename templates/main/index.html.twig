@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Welcome to Bibliogest{% endblock %}
+
+{% block body %}
+    <!-- Header-->
+    <header class="bg-primary bg-gradient text-white">
+        <div class="container px-4 text-center">
+            <h1 class="fw-bolder"><i class="fas fa-book"></i> Bibliogest</h1>
+            <p class="lead">Catalogue en ligne de la médiathèque de Saint-Ouen</p>
+            <a class="btn btn-lg btn-light" href="{{ path('app_book_index') }}">
+                <i class="fas fa-search"></i> Parcourez le catalogue
+            </a>
+        </div>
+    </header>
+
+    <!-- Statistics Cards -->
+    <section class="py-5">
+        <div class="container px-4">
+            <div class="row mb-5">
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-info text-white h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-book fa-3x mb-3"></i>
+                            <h3>{{ total_books }}</h3>
+                            <p class="card-text">Total Books</p>
+                            <a href="{{ path('app_book_index') }}" class="btn btn-light">Browse Books</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-success text-white h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-user-edit fa-3x mb-3"></i>
+                            <h3>{{ total_authors }}</h3>
+                            <p class="card-text">Total Authors</p>
+                            <a href="{{ path('app_author_index') }}" class="btn btn-light">Browse Authors</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card bg-warning text-white h-100">
+                        <div class="card-body text-center">
+                            <i class="fas fa-building fa-3x mb-3"></i>
+                            <h3>{{ total_editors }}</h3>
+                            <p class="card-text">Total Publishers</p>
+                            <a href="{{ path('app_publisher_index') }}" class="btn btn-light">Browse Publishers</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About section-->
+    <section class="py-5 bg-light">
+        <div class="container px-4">
+            <div class="row gx-4 justify-content-center">
+                <div class="col-lg-8">
+                    <h2><i class="fas fa-info-circle"></i> Bibliogest: qu'est-ce que c'est?</h2>
+                    <p class="lead">Bibliogest est la plateforme officielle de consultation du catalogue de la médiathèque de Saint-Ouen. Explorez notre collection avec une recherche efficace, vérifiez la disponibilité des ouvrages en temps réel, et effectuez des réservations en toute simplicité. bibliogest s'engage pour faciliter l'accès à la culture et promouvoir la richesse de notre patrimoine littéraire.</p>
+                    <p>Fonctionnalités clés :</p>
+                    <ul>
+                        <li><i class="fas fa-search text-primary"></i> Recherche avancée de livres</li>
+                        <li><i class="fas fa-clock text-success"></i> Consultation en temps réel du statut des ouvrages (disponible, emprunté, indisponible)</li>
+                        <li><i class="fas fa-info text-info"></i> Affichage détaillé des informations sur les livres</li>
+                        <li><i class="fas fa-bookmark text-warning"></i> Processus de réservation simplifié</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recent Books Section -->
+    {% if recent_books %}
+    <section class="py-5">
+        <div class="container px-4">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-4"><i class="fas fa-clock"></i> Recently Added Books</h2>
+                </div>
+            </div>
+            <div class="row">
+                {% for book in recent_books %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card h-100">
+                        <img src="{{ book.cover }}" class="card-img-top" alt="{{ book.title }}" style="height: 300px; object-fit: cover;">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text">
+                                <small class="text-muted">
+                                    <i class="fas fa-calendar"></i> {{ book.editedAt|date('Y-m-d') }}
+                                </small>
+                            </p>
+                            <p class="card-text">
+                                {% for author in book.authors %}
+                                    <span class="badge bg-secondary">{{ author.name }}</span>
+                                {% endfor %}
+                            </p>
+                            <div class="mt-auto">
+                                <a href="{{ path('app_book_show', {'id': book.id}) }}" class="btn btn-primary">
+                                    <i class="fas fa-eye"></i> View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    {% endif %}
+{% endblock %}

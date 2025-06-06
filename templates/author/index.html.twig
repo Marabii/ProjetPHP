@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Authors{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="mb-4">
+                <i class="fas fa-user-edit"></i> Authors
+                <span class="badge bg-primary">{{ authors|length }} authors</span>
+            </h1>
+        </div>
+    </div>
+
+    <div class="row">
+        {% for author in authors %}
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">
+                        <i class="fas fa-user"></i> {{ author.name }}
+                    </h5>
+                    
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <i class="fas fa-birthday-cake"></i> 
+                            Born: {{ author.dateOfBirth|date('F j, Y') }}
+                        </small>
+                    </p>
+                    
+                    {% if author.dateOfDeath %}
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <i class="fas fa-cross"></i> 
+                            Died: {{ author.dateOfDeath|date('F j, Y') }}
+                        </small>
+                    </p>
+                    {% endif %}
+                    
+                    {% if author.nationality %}
+                    <p class="card-text">
+                        <small class="text-muted">
+                            <i class="fas fa-flag"></i> 
+                            Nationality: {{ author.nationality }}
+                        </small>
+                    </p>
+                    {% endif %}
+                    
+                    <p class="card-text">
+                        <span class="badge bg-info">
+                            <i class="fas fa-book"></i> {{ author.books|length }} book(s)
+                        </span>
+                    </p>
+                    
+                    <div class="mt-auto">
+                        <a href="{{ path('app_author_show', {'id': author.id}) }}" class="btn btn-primary w-100">
+                            <i class="fas fa-eye"></i> View Details
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <div class="col-12">
+            <div class="alert alert-info text-center">
+                <i class="fas fa-info-circle"></i> No authors found.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

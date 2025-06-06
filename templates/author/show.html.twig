@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ author.name }}{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ path('app_main') }}">Home</a></li>
+                    <li class="breadcrumb-item"><a href="{{ path('app_author_index') }}">Authors</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">{{ author.name }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-user"></i> Author Information</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="card-title">{{ author.name }}</h4>
+                    
+                    <div class="mb-3">
+                        <strong><i class="fas fa-birthday-cake"></i> Born:</strong><br>
+                        {{ author.dateOfBirth|date('F j, Y') }}
+                    </div>
+                    
+                    {% if author.dateOfDeath %}
+                    <div class="mb-3">
+                        <strong><i class="fas fa-cross"></i> Died:</strong><br>
+                        {{ author.dateOfDeath|date('F j, Y') }}
+                    </div>
+                    {% endif %}
+                    
+                    {% if author.nationality %}
+                    <div class="mb-3">
+                        <strong><i class="fas fa-flag"></i> Nationality:</strong><br>
+                        {{ author.nationality }}
+                    </div>
+                    {% endif %}
+                    
+                    <div class="mb-3">
+                        <strong><i class="fas fa-book"></i> Total Books:</strong><br>
+                        <span class="badge bg-primary fs-6">{{ author.books|length }} book(s)</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h3><i class="fas fa-book"></i> Books by {{ author.name }}</h3>
+                </div>
+                <div class="card-body">
+                    {% if author.books|length > 0 %}
+                    <div class="row">
+                        {% for book in author.books %}
+                        <div class="col-md-6 mb-3">
+                            <div class="card h-100">
+                                <div class="row g-0">
+                                    <div class="col-4">
+                                        <img src="{{ book.cover }}" class="img-fluid rounded-start h-100" alt="{{ book.title }}" style="object-fit: cover;">
+                                    </div>
+                                    <div class="col-8">
+                                        <div class="card-body">
+                                            <h6 class="card-title">{{ book.title }}</h6>
+                                            <p class="card-text">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-calendar"></i> {{ book.editedAt|date('Y') }}
+                                                </small>
+                                            </p>
+                                            <p class="card-text">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-building"></i> {{ book.editor.name }}
+                                                </small>
+                                            </p>
+                                            <p class="card-text">
+                                                {% if book.status.value == 'available' %}
+                                                    <span class="badge bg-success">
+                                                        <i class="fas fa-check-circle"></i> {{ book.status.label }}
+                                                    </span>
+                                                {% elseif book.status.value == 'borrowed' %}
+                                                    <span class="badge bg-warning">
+                                                        <i class="fas fa-clock"></i> {{ book.status.label }}
+                                                    </span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">
+                                                        <i class="fas fa-times-circle"></i> {{ book.status.label }}
+                                                    </span>
+                                                {% endif %}
+                                            </p>
+                                            <a href="{{ path('app_book_show', {'id': book.id}) }}" class="btn btn-sm btn-primary">
+                                                <i class="fas fa-eye"></i> View
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> No books found for this author.
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <div class="col-12">
+            <a href="{{ path('app_author_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Back to Authors
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
